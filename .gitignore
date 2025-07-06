@@ -1,0 +1,88 @@
+# === OS-specific files ===
+.DS_Store
+Thumbs.db
+
+# === CMake build folders ===
+/build/
+/cmake-build-*/
+/CMakeFiles/
+/CMakeCache.txt
+Makefile
+cmake_install.cmake
+CTestTestfile.cmake
+install_manifest.txt
+
+# === Compiled binaries and objects ===
+*.o
+*.obj
+*.lo
+*.a
+*.lib
+*.so
+*.so.*
+*.dll
+*.dylib
+*.exe
+*.out
+
+# === CLion / JetBrains IDE ===
+.idea/
+*.iml
+*.iws
+
+# === Visual Studio / MSVC ===
+*.vcxproj*
+*.sln
+*.user
+*.filters
+*.opensdf
+*.sdf
+*.cache
+*.db
+
+# === Code::Blocks ===
+*.depend
+*.layout
+*.cbp
+
+# === Qt Creator ===
+*.pro.user*
+*.qmake.stash
+
+# === Logs / dumps / misc ===
+*.log
+*.core
+*.stackdump
+
+# === Test artifacts ===
+Testing/
+test_detail.xml
+test_output.txt
+
+# === Backup / temp ===
+*~
+*.swp
+*.bak
+*.tmp
+
+# === Conan / vcpkg / dependencies ===
+conanbuild/
+conan.lock
+conanfile.txt
+conanfile.py
+vcpkg_installed/
+vcpkg_buildtrees/
+vcpkg_downloads/
+vcpkg_packages/
+
+# === Ninja ===
+.ninja_deps
+.ninja_log
+
+# === CCache (if used) ===
+.ccache/
+
+# === Clangd ===
+.cache/
+.clangd/
+compile_commands.json
