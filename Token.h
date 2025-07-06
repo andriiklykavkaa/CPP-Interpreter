@@ -53,6 +53,23 @@ public:
     }
 };
 
-typedef std::variant<NumToken, OpToken, FuncToken> Token;
+enum DelimTokenType {
+    open = 0,
+    close = 1
+};
+
+class DelimToken {
+private:
+    DelimTokenType type;
+public:
+    explicit DelimToken(DelimTokenType type) : type(type) {}
+    ~DelimToken() = default;
+
+    [[nodiscard]] DelimTokenType get_type() const {
+        return type;
+    }
+};
+
+typedef std::variant<NumToken, OpToken, FuncToken, DelimToken> Token;
 
 #endif //TOKEN_H

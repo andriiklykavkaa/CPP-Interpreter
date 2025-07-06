@@ -40,13 +40,24 @@ public:
         while(i < text.size()) {
             const char c = text[i];
 
-            if (c == ' ' || c == ',') {
+            if (c == '(' || c == ')') {
+                process_token(s_token);
+                if (text[i] == '(') {
+                    Token d_t = DelimToken(DelimTokenType::open);
+                    tokens.push_back(d_t);
+                    expect_unary = true;
+                } else {
+                    Token d_t = DelimToken(DelimTokenType::close);
+                    tokens.push_back(d_t);
+                    expect_unary = false;
+                }
+                ++i;
+            }
+            else if (c == ' ' || c == ',') {
                 process_token(s_token);
                 ++i;
-                continue;
             }
-
-            if(std::isdigit(c)) {
+            else if(std::isdigit(c)) {
                 s_token += c;
                 ++i;
 
@@ -70,10 +81,10 @@ public:
             } else if (c == '+' || c == '-') {
                 process_token(s_token);
                 if (expect_unary) {
-                    Token op_t = (text[i] == '+') ? OpToken(o_positate) : OpToken(o_negate);
+                    Token op_t = (c == '+') ? OpToken(o_positate) : OpToken(o_negate);
                     tokens.push_back(op_t);
                 } else {
-                    Token fn_t = (text[i] == '+') ? FuncToken(1, f_add) : FuncToken(1, f_sub);
+                    Token fn_t = (c == '+') ? FuncToken(1, f_add) : FuncToken(1, f_sub);
                     tokens.push_back(fn_t);
                     expect_unary = true;
                 }
@@ -109,7 +120,7 @@ public:
         throw std::runtime_error("Unknown token: " + s_t);
     }
 
-    
+
     static bool is_integer(const std::string &s_t) {
         try {
             size_t pos;

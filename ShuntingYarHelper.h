@@ -14,14 +14,20 @@ struct overloaded: Ts... {
   using Ts::operator()...;
 };
 
+
+
 class ShuntingYardHelper {
 private:
+    typedef std::stack<FuncToken> FuncTokenStack;
+
     std::stack<OpToken> o_stack;
-    std::stack<FuncToken> f_stack;
+    std::stack<FuncTokenStack> f_stack_2d;
     std::vector<int> output;
 
 public:
-    ShuntingYardHelper() = default;
+    ShuntingYardHelper() {
+        f_stack_2d.emplace();
+    }
     ~ShuntingYardHelper() = default;
 
     [[nodiscard]] int calculate(const std::vector<Token> &tokens) {
@@ -30,12 +36,17 @@ public:
             handle_token(token);
         }
 
-        while (!f_stack.empty()) {
-            apply_func_token(f_stack.top());
-            f_stack.pop();
+        while (!f_stack_2d.empty()) {
+            auto& top_stack = f_stack_2d.top();
+            while(!top_stack.empty()) {
+                apply_func_token(top_stack.top());
+                top_stack.pop();
+            }
+
+            f_stack_2d.pop();
         }
 
-        if (!o_stack.empty() || !f_stack.empty() || output.size() != 1) {
+        if (!o_stack.empty() || !f_stack_2d.empty() || output.size() != 1) {
             std::cout << "Error in inner sizing. Format is invalid." << std::endl;
             return 0;
         }
@@ -47,7 +58,6 @@ public:
     void apply_func_token(const FuncToken &t) {
         if (output.size() < 2) {
             std::cout << "Error applying function." << std::endl;
-            return;
         }
 
         const int b = output.back();
@@ -79,18 +89,32 @@ public:
                     },
 
                     [this](const FuncToken &t) -> void {
-                        while (!f_stack.empty() && f_stack.top().get_priority() >= t.get_priority()) {
-                            apply_func_token(f_stack.top());
-                            f_stack.pop();
+                        auto& top_stack = f_stack_2d.top();
+                        while (!top_stack.empty() && top_stack.top().get_priority() >= t.get_priority()) {
+                            apply_func_token(top_stack.top());
+                            top_stack.pop();
                         }
-                        f_stack.push(t);
+                        top_stack.push(t);
+                    },
+
+                    [this](const DelimToken &t) -> void {
+                        if (t.get_type() == DelimTokenType::open) {
+                            f_stack_2d.emplace();
+                        } else {
+                            auto top_stack = f_stack_2d.top();
+                            while(!top_stack.empty()) {
+                                apply_func_token(top_stack.top());
+                                top_stack.pop();
+                            }
+                            f_stack_2d.pop();
+                        }
                     }
                 }, token);
     }
 
     void reset_structures() {
         while (!o_stack.empty()) { o_stack.pop(); }
-        while (!f_stack.empty()) { f_stack.pop(); }
+        while (!f_stack_2d.empty()) { f_stack_2d.pop(); }
         output.clear();
     }
 };

@@ -15,6 +15,8 @@ private:
     ShuntingYardHelper sy_helper;
     Tokenizer tokenizer;
 
+    std::unordered_map<std::string, int> env;
+
 public:
     Interpreter(const ShuntingYardHelper &sy_helper = ShuntingYardHelper(), const Tokenizer &tokenizer = Tokenizer())
     : sy_helper(sy_helper)
