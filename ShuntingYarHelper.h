@@ -26,26 +26,34 @@ public:
 
     [[nodiscard]] int calculate(const std::vector<Token> &tokens) {
 
-        for(Token &token : tokens) {
+        for(Token token : tokens) {
             handle_token(token);
+        }
+
+        while (!f_stack.empty()) {
+            apply_func_token(f_stack.top());
+            f_stack.pop();
         }
 
         if (!o_stack.empty() || !f_stack.empty() || output.size() != 1) {
             std::cout << "Error in inner sizing. Format is invalid." << std::endl;
-            return NULL;
+            return 0;
         }
-
-        return output.back();
+        int result = output.back();
+        reset_structures();
+        return result;
     }
 
     void apply_func_token(const FuncToken &t) {
-        if (output.size() <= 2) {
+        if (output.size() < 2) {
             std::cout << "Error applying function." << std::endl;
             return;
         }
 
-        int a = output.pop_back();
-        int b = output.pop_back();
+        const int b = output.back();
+        output.pop_back();
+        const int a = output.back();
+        output.pop_back();
 
         output.push_back(t.apply(a, b));
 
@@ -77,6 +85,11 @@ public:
                 }, token);
     }
 
+    void reset_structures() {
+        while (!o_stack.empty()) { o_stack.pop(); }
+        while (!f_stack.empty()) { f_stack.pop(); }
+        output.clear();
+    }
 };
 
 #endif //SHUNTINGYARHELPER_H

@@ -30,7 +30,7 @@ public:
         return func(a);
     }
 
-    std::function<int(int)> get_op() {
+    std::function<int(int)>& get_op() {
         return func;
     }
 };
@@ -54,19 +54,5 @@ public:
 };
 
 typedef std::variant<NumToken, OpToken, FuncToken> Token;
-
-//
-// class Token {
-// public:
-//     TokenType type;
-//     std::string raw_value;
-//
-//     Token(const TokenType type, std::string &value)
-//     : type(type)
-//     , raw_value(std::move(value))
-//     {}
-//
-//     ~Token() = default;
-// };
 
 #endif //TOKEN_H

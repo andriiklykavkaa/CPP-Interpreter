@@ -1,7 +1,16 @@
 #include <iostream>
 
+#include "Interpreter.h"
+
 int main()
 {
-    std::cout << "Hello, World!" << std::endl;
+    Interpreter interpreter = Interpreter();
+
+    std::string input;
+    while (true) {
+        std::cout << ">> ";
+        std::getline(std::cin, input);
+        interpreter.interprete_line(input);
+    }
     return 0;
 }
