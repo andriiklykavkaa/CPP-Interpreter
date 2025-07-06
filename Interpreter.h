@@ -25,6 +25,7 @@ public:
     void interprete_line(std::string &line) {
         std::vector<Token> tokens;
         tokens = tokenizer.tokenize(line);
+
         int result = sy_helper.calculate(tokens);
         std::cout << result << std::endl;
     }

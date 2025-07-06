@@ -12,8 +12,8 @@ inline auto o_negate = [](const int a) -> int {
     return -a;
 };
 
-inline auto o_sqroot = [](const int a) -> double {
-    return sqrt(a);
+inline auto o_positate = [](const int a) -> double {
+    return a;
 };
 
 // Function token functions

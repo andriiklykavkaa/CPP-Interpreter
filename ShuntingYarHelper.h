@@ -63,18 +63,21 @@ public:
     void handle_token(Token &token) {
         std::visit(overloaded
                 {
+
                     [this](const NumToken &t) -> void {
                         int val = t.get_value();
-                        if (!o_stack.empty()) {
+                        while (!o_stack.empty()) {
                             const OpToken op_t = o_stack.top();
                             o_stack.pop();
                             val = op_t.apply(val);
                         }
                         output.push_back(val);
                     },
+
                     [this](OpToken &t) -> void {
                         o_stack.push(t);
                     },
+
                     [this](const FuncToken &t) -> void {
                         while (!f_stack.empty() && f_stack.top().get_priority() >= t.get_priority()) {
                             apply_func_token(f_stack.top());

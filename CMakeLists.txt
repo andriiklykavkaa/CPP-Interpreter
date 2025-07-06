@@ -8,4 +8,5 @@ add_executable(Interpreter main.cpp
         Token.h
         ShuntingYarHelper.h
         funcs.h
+        Tokenizer.h
         Tokenizer.h)
