@@ -11,7 +11,7 @@ int main()
         std::cout << ">> ";
         std::getline(std::cin, input);
         if (input == "/exit") break;
-        interpreter.interprete_line(input);
+        interpreter.interpret_line(input);
     }
     return 0;
 }

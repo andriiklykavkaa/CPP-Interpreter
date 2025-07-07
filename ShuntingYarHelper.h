@@ -98,7 +98,7 @@ public:
                     },
 
                     [this](const DelimToken &t) -> void {
-                        if (t.get_type() == DelimTokenType::open) {
+                        if (t.get_type() == DelimTokenType::opens) {
                             f_stack_2d.emplace();
                         } else {
                             auto top_stack = f_stack_2d.top();
@@ -114,7 +114,12 @@ public:
 
     void reset_structures() {
         while (!o_stack.empty()) { o_stack.pop(); }
-        while (!f_stack_2d.empty()) { f_stack_2d.pop(); }
+        while (!f_stack_2d.empty()) {
+            auto& top = f_stack_2d.top();
+            while(!top.empty()) top.pop();
+            f_stack_2d.pop();
+        }
+        f_stack_2d.emplace();
         output.clear();
     }
 };

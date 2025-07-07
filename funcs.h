@@ -38,12 +38,12 @@ inline auto f_divide = [](const int a, const int b) -> int {
     return a / b;
 };
 
-inline auto f_max = [](const int a, const int b) -> int {
-    return std::max(a, b);
-};
-
-inline auto f_min = [](const int a, const int b) -> int {
-    return std::min(a, b);
-};
+// inline auto f_max = [](const int a, const int b) -> int {
+//     return std::max(a, b);
+// };
+//
+// inline auto f_min = [](const int a, const int b) -> int {
+//     return std::min(a, b);
+// };
 
 #endif //FUNCS_H

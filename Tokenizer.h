@@ -16,14 +16,14 @@ private:
 public:
     Tokenizer() = default;
     ~Tokenizer() = default;
-    std::vector<Token> tokenize(const std::string &text) const {
+    std::vector<Token> tokenize(const std::string &text, const std::unordered_map<std::string, int> &var_env) const {
         std::vector<Token> tokens;
         std::string s_token;
 
         auto process_token = [&](std::string &token) -> void {
             if(!token.empty()) {
                 try {
-                    Token t = convertStrToToken(token);
+                    Token t = convertStrToToken(token, var_env);
                     tokens.push_back(t);
                     token.clear();
                 } catch (std::runtime_error &e) {
@@ -43,17 +43,17 @@ public:
             if (c == '(' || c == ')') {
                 process_token(s_token);
                 if (text[i] == '(') {
-                    Token d_t = DelimToken(DelimTokenType::open);
+                    Token d_t = DelimToken(DelimTokenType::opens);
                     tokens.push_back(d_t);
                     expect_unary = true;
                 } else {
-                    Token d_t = DelimToken(DelimTokenType::close);
+                    Token d_t = DelimToken(DelimTokenType::closes);
                     tokens.push_back(d_t);
                     expect_unary = false;
                 }
                 ++i;
             }
-            else if (c == ' ' || c == ',') {
+            else if (c == ' ') {
                 process_token(s_token);
                 ++i;
             }
@@ -107,15 +107,14 @@ public:
     }
 
 
-    static Token convertStrToToken(const std::string &s_t) {
+    static Token convertStrToToken(const std::string &s_t, const std::unordered_map<std::string, int> &var_env) {
         if (is_integer(s_t)) {
             return NumToken(std::atoi(s_t.c_str()));
         }
 
-        if (s_t == "max")
-            return FuncToken(3, f_max);
-        if (s_t == "min")
-            return FuncToken(3, f_min);
+        if (var_env.contains(s_t)) {
+            return NumToken(var_env.at(s_t));
+        }
 
         throw std::runtime_error("Unknown token: " + s_t);
     }

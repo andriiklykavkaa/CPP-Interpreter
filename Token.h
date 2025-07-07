@@ -54,8 +54,8 @@ public:
 };
 
 enum DelimTokenType {
-    open = 0,
-    close = 1
+    opens = 0,
+    closes = 1
 };
 
 class DelimToken {
